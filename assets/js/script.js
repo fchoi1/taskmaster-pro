@@ -13,7 +13,8 @@ var createTask = function(taskText, taskDate, taskList) {
   // append span and p element to parent li
   taskLi.append(taskSpan, taskP);
 
-
+  auditTask(taskLi);
+  
   // append to ul list on the page
   $("#list-" + taskList).append(taskLi);
 };
@@ -126,16 +127,27 @@ $(".list-group").on("click","span", function(){
   var dateInput = $("<input>")
     .attr("type", "text")
     .addClass("form-control")
-    .val(date);
+    .val(date)
 
   // Swap elements
   $(this).replaceWith(dateInput);
+  
+  // Enable Jquery UI Datepicker
+  dateInput.datepicker({
+    minDate: 1,
+    onClose: function(){
+      // When date picker is closed or clicked out, force a change event as well
+      $(this).trigger("change");
+    }
+  });
+
   // Focus date inout
   dateInput.trigger("focus");
+
 })
 
 
-$(".list-group").on("blur", "input[type='text']", function(){
+$(".list-group").on("change", "input[type='text']", function(){
   // Get current date
   var date = $(this).val();
   
@@ -160,7 +172,48 @@ $(".list-group").on("blur", "input[type='text']", function(){
     .text(date);
   // replace textarea wtih taskSpan
   $(this).replaceWith(taskSpan);
+
+  // Update task colour
+  auditTask($(taskSpan).closest(".list-group-item")); // Loop for closest element with that name
 });
+
+// Make drag and drop
+$( ".card .list-group" ).sortable({
+  connectWith: $( ".card .list-group" ),
+  scroll: false,
+  tolerance: "pointer",
+  helper: "clone",
+  update: function(event) {
+    // loop over the children elements (list item) to save
+    var tempArray = []; // Temp array to store changed tasks
+
+    $(this).children().each(function() { //Callback function
+
+      var text = $(this)
+        .find("p")
+        .text()
+        .trim();
+
+      var date = $(this)
+        .find("span")
+        .text()
+        .trim();
+
+      tempArray.push({
+        text: text,
+        date: date
+      })
+      } );
+
+      var statusName = $(this)
+        .attr("id")
+        .replace("list-","");
+      
+      tasks[statusName] = tempArray; // update task 
+      saveTasks();
+  }
+}).disableSelection();
+
 
 // remove all tasks
 $("#remove-tasks").on("click", function() {
@@ -171,7 +224,53 @@ $("#remove-tasks").on("click", function() {
   saveTasks();
 });
 
+$( "#trash" ).droppable({ // UI is th e object with a property called draggable
+  accept: ".card .list-group-item",
+  tolerance: "touch",
+  drop: function(event,ui){
+    ui.draggable.remove(); // Deleting a task automaticall updates the sortable list
+  }
+});
+
+//Date Picker
+
+$("#modalDueDate").datepicker({
+  // Prevent users from selecting past due dates
+  minDate: 1,
+});
+
+// Check due dates
+var auditTask = function(taskEl){
+  // Ensure element is geeting to the function
+  var date = $(taskEl).find("span").text().trim(); // Get date from list item
+
+  // convert to moment object and set to 5pm
+  var time = moment(date, "L").set("hour", 17);
+
+  // Remove old classes from element if applicable
+  $(taskEl).removeClass("list-group-item-warning list-group-item-danger");
+
+  //Due date logic if current date is after current time
+  if (moment().isAfter(time)) {
+    $(taskEl).addClass("list-group-item-danger");
+  }else if (Math.abs(moment().diff(time,"days")) <= 2 ){  // Check if due date is upcoming within 2 days
+    $(taskEl).addClass("list-group-item-warning");
+  }
+
+
+  
+
+
+
+  var current = moment();
+
+  
+  
+
+}
+
 // load tasks for the first time
 loadTasks();
 
+auditTask();
 
