@@ -47,6 +47,7 @@ var saveTasks = function() {
 };
 
 
+
 // modal was triggered
 $("#task-form-modal").on("show.bs.modal", function() {
   // clear values
@@ -183,6 +184,21 @@ $( ".card .list-group" ).sortable({
   scroll: false,
   tolerance: "pointer",
   helper: "clone",
+  // Add Color and trash on drag
+  activate: function(event){
+    $(this).addClass("dropover");
+    $(".bottom-trash").addClass("bottom-trash-drag")
+  },
+  deactivate: function(event){
+    $(this).removeClass("dropover");
+    $(".bottom-trash").removeClass("bottom-trash-drag")
+  },
+  over: function(event){
+    $(event.target).addClass("dropover-active");
+  },
+  out: function(event){
+    $(event.target).removeClass("dropover-active");
+  },
   update: function(event) {
     // loop over the children elements (list item) to save
     var tempArray = []; // Temp array to store changed tasks
@@ -229,6 +245,13 @@ $( "#trash" ).droppable({ // UI is th e object with a property called draggable
   tolerance: "touch",
   drop: function(event,ui){
     ui.draggable.remove(); // Deleting a task automaticall updates the sortable list
+  },
+  over: function() {
+    $(".bottom-trash").addClass("bottom-trash-active");
+  },
+  out: function(){
+    $(".bottom-trash").removeClass("bottom-trash-active");
+
   }
 });
 
@@ -256,18 +279,17 @@ var auditTask = function(taskEl){
   }else if (Math.abs(moment().diff(time,"days")) <= 2 ){  // Check if due date is upcoming within 2 days
     $(taskEl).addClass("list-group-item-warning");
   }
-
-
-  
-
-
-
-  var current = moment();
-
-  
-  
-
 }
+
+// Used to check every 30 mins so user doesn't need to refresh
+
+
+setInterval(function(){
+  $(".card .list-group-item").each(function(index,el){
+    auditTask(el);
+  });
+}, (1000 * 60) *30); // 30 mins in seconds
+
 
 // load tasks for the first time
 loadTasks();

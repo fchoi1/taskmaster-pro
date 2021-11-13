@@ -5,9 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,700;1,400&family=Staatliches&display=swap" rel="stylesheet">
+  <!-- SVG Icons-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" />
   <!-- using bootstrap -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-  <!-- Jquery UI CSS -->
+  <!-- Jquery UI CSS -->  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
   <link rel="stylesheet" href="./assets/css/style.css" />
   <title>Taskmaster Pro</title>
@@ -17,15 +23,18 @@
 
   <div class="row min-vh-100 no-gutters">
     <header class="col-12 col-lg-3 bg-dark text-light d-flex flex-column p-4 p-lg-3 sticky-top">
-      <h1 class="text-center">Taskmaster Pro Edition</h1>
+      <h1 class="text-center">
+        <span class="oi oi-task d-inline d-lg-none"></span>
+        Taskmaster Pro Edition</h1>
       <div class="ml-md-auto w-100 w-md-auto"> <!-- From code Snippet-->
 
-        <button id="create-task" class="btn btn-block btn-success" data-toggle="modal" data-target="#task-form-modal">Add
+        <button id="create-task" class="btn btn-block btn-success" data-toggle="modal" data-target="#task-form-modal"><span class="oi oi-plus mr-2"></span>Add
           Task</button>
-        <button id="remove-tasks" class="btn btn-block btn-danger mb-2 mb-md-4">Delete All Tasks</button>
+        <button id="remove-tasks" class="btn btn-block btn-danger mb-2 mb-md-4"><span class="oi oi-trash mr-2"></span>Delete All Tasks</button>
           <!-- From code Snippet  mb-2 mb-md-4-->
       </div>
-      <p class="mt-auto d-none d-lg-block">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi voluptas architecto ipsa
+      <span class="oi oi-task display-1 text-center mb-2 d-none d-lg-block mt-auto"></span>
+      <p class="d-none d-lg-block">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi voluptas architecto ipsa
         excepturi aut non
         laudantium sequi fugit officiis optio deleniti asperiores rem eius laborum maxime blanditiis culpa, quis iste?
       </p>
@@ -61,9 +70,9 @@
           </div>
         </div>
       </div>
-      <div class="mt-auto" id="trash">
-        <div class="w-100 bg-danger p-3 text-center text-light display-4 ">
-          Drop Here to Remove
+      <div class="mt-auto overflow-hidden" id="trash">
+        <div class="w-100 p-3 text-center bottom-trash">
+          <span class="oi oi-trash mr-2 mt-auto mb-4"></span>Drop Here to Remove
         </div>
       </div>
     </main>
@@ -111,6 +120,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script> <!-- Used for the modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> <!-- Moment Time -->
+  
+  
   <script src="./assets/js/script.js"></script>
 </body>
 
